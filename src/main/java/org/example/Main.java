@@ -33,7 +33,7 @@ public class Main {
                 int inputValue = SCANNER.nextInt();
                 SCANNER.nextLine();
                 switch (inputValue) {
-                    case 1 -> createUserFomInputData();
+                    case 1 -> createUserFromInputData();
                     case 2 -> searchUserById();
                     case 3 -> updateUserById();
                     case 4 -> deleteUserById();
@@ -59,7 +59,7 @@ public class Main {
         }
     }
 
-    public static void createUserFomInputData() {
+    public static void createUserFromInputData() {
         System.out.println("Введите последовательно Имя, email и возраст через запятую c пробелом");
         String input = SCANNER.nextLine();
         try {

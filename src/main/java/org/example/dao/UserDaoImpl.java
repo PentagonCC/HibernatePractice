@@ -22,13 +22,16 @@ public class UserDaoImpl implements UserDao {
             User user = session.find(User.class, userId);
             session.close();
             return user;
+        } catch (NullPointerException e) {
+            logger.error(e);
+            throw new NullPointerException("SessionFactoryIsNull");
         } catch (HibernateException e) {
             if (session != null && session.isOpen()) {
                 session.close();
             }
             logger.error(e);
+            throw new HibernateException("Ошибка операции с БД");
         }
-        return new User();
     }
 
     @Override
@@ -42,6 +45,9 @@ public class UserDaoImpl implements UserDao {
             createTransaction.commit();
             session.close();
             return user;
+        } catch (NullPointerException e) {
+            logger.error(e);
+            throw new NullPointerException("SessionFactoryIsNull");
         } catch (HibernateException e) {
             if (createTransaction != null) {
                 createTransaction.rollback();
@@ -50,8 +56,8 @@ public class UserDaoImpl implements UserDao {
                 session.close();
             }
             logger.error(e);
+            throw new HibernateException("Ошибка операции с БД");
         }
-        return new User();
     }
 
 
@@ -66,7 +72,10 @@ public class UserDaoImpl implements UserDao {
             updateTransaction.commit();
             session.close();
             return user;
-        }catch (HibernateException e){
+        } catch (NullPointerException e) {
+            logger.error(e);
+            throw new NullPointerException("SessionFactoryIsNull");
+        } catch (HibernateException e) {
             if (updateTransaction != null) {
                 updateTransaction.rollback();
             }
@@ -74,8 +83,8 @@ public class UserDaoImpl implements UserDao {
                 session.close();
             }
             logger.error(e);
+            throw new HibernateException("Ошибка операции с БД");
         }
-        return new User();
     }
 
     @Override
@@ -88,7 +97,10 @@ public class UserDaoImpl implements UserDao {
             session.remove(user);
             deleteTransaction.commit();
             session.close();
-        }catch (HibernateException e){
+        } catch (NullPointerException e) {
+            logger.error(e);
+            throw new NullPointerException("SessionFactoryIsNull");
+        } catch (HibernateException e) {
             if (deleteTransaction != null) {
                 deleteTransaction.rollback();
             }
@@ -96,6 +108,7 @@ public class UserDaoImpl implements UserDao {
                 session.close();
             }
             logger.error(e);
+            throw new HibernateException("Ошибка операции с БД");
         }
     }
 }
