@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
             return user;
         } catch (NullPointerException e) {
             logger.error(e);
-            throw new NullPointerException("SessionFactoryIsNull");
+            throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
             return user;
         } catch (NullPointerException e) {
             logger.error(e);
-            throw new NullPointerException("SessionFactoryIsNull");
+            throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
             if (createTransaction != null) {
                 createTransaction.rollback();
@@ -74,7 +74,7 @@ public class UserDaoImpl implements UserDao {
             return user;
         } catch (NullPointerException e) {
             logger.error(e);
-            throw new NullPointerException("SessionFactoryIsNull");
+            throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
             if (updateTransaction != null) {
                 updateTransaction.rollback();
@@ -99,7 +99,7 @@ public class UserDaoImpl implements UserDao {
             session.close();
         } catch (NullPointerException e) {
             logger.error(e);
-            throw new NullPointerException("SessionFactoryIsNull");
+            throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
             if (deleteTransaction != null) {
                 deleteTransaction.rollback();
