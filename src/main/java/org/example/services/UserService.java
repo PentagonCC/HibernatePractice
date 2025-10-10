@@ -26,7 +26,7 @@ public class UserService {
             logger.info("Создание пользователя");
             LocalDateTime createdAt = LocalDateTime.now();
             User newUser = new User(name, email, age, createdAt);
-            userDao.create(newUser);
+            logger.info("Создан: {}", userDao.create(newUser));
         }
         else {
             System.out.println("Неверно введены данные");

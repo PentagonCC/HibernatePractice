@@ -6,17 +6,19 @@ import org.example.models.User;
 import org.example.utils.SessionFactoryUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = LogManager.getLogger();
+    private final SessionFactory sessionFactory = SessionFactoryUtil.getSessionFactory();
 
     @Override
     public User findById(int userId) {
         Session session = null;
         try {
-            session = SessionFactoryUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             User user = session.find(User.class, userId);
             session.close();
             return user;
@@ -30,15 +32,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void create(User user) {
+    public User create(User user) {
         Session session = null;
         Transaction createTransaction = null;
         try {
-            session = SessionFactoryUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             createTransaction = session.beginTransaction();
             session.persist(user);
             createTransaction.commit();
             session.close();
+            return user;
         } catch (HibernateException e) {
             if (createTransaction != null) {
                 createTransaction.rollback();
@@ -48,19 +51,21 @@ public class UserDaoImpl implements UserDao {
             }
             logger.error(e);
         }
+        return new User();
     }
 
 
     @Override
-    public void update(User user) {
+    public User update(User user) {
         Session session = null;
         Transaction updateTransaction = null;
         try {
-            session = SessionFactoryUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             updateTransaction = session.beginTransaction();
             session.merge(user);
             updateTransaction.commit();
             session.close();
+            return user;
         }catch (HibernateException e){
             if (updateTransaction != null) {
                 updateTransaction.rollback();
@@ -70,6 +75,7 @@ public class UserDaoImpl implements UserDao {
             }
             logger.error(e);
         }
+        return new User();
     }
 
     @Override
@@ -77,7 +83,7 @@ public class UserDaoImpl implements UserDao {
         Session session = null;
         Transaction deleteTransaction = null;
         try {
-            session = SessionFactoryUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             deleteTransaction = session.beginTransaction();
             session.remove(user);
             deleteTransaction.commit();
