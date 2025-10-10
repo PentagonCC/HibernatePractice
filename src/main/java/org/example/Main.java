@@ -12,6 +12,8 @@ import java.util.Scanner;
 public class Main {
 
     private static final Logger logger = LogManager.getLogger();
+    private static final Scanner SCANNER = new Scanner(System.in);
+    private static UserService userService = new UserService(new UserDaoImpl());
 
     static void menu() {
         System.out.println("""
@@ -24,92 +26,22 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        UserService userService = new UserService(new UserDaoImpl());
-        User user;
-        String input;
-        Scanner scanner = new Scanner(System.in);
         boolean runFlag = true;
         while (runFlag) {
             menu();
-            if (scanner.hasNextInt()) {
-                int inputValue = scanner.nextInt();
-                scanner.nextLine();
+            if (SCANNER.hasNextInt()) {
+                int inputValue = SCANNER.nextInt();
+                SCANNER.nextLine();
                 switch (inputValue) {
-                    case 1:
-                        System.out.println("Введите последовательно Имя, email и возраст через запятую c пробелом");
-                        input = scanner.nextLine();
-                        try {
-                            String[] userValues = input.split(", ");
-                            if (checkNumber(userValues[2])) {
-                                userService.createUser(userValues[0], userValues[1], Integer.parseInt(userValues[2]));
-                            } else {
-                                System.out.println("Возраст должен быть числом!");
-                                logger.info("Введен некорректный возраст");
-                            }
-                        } catch (IndexOutOfBoundsException e) {
-                            logger.error(e);
-                        }
-                        break;
-                    case 2:
-                        System.out.println("Введите id Пользователя");
-                        input = scanner.nextLine();
-                        if (checkNumber(input)) {
-                            user = userService.findUser(Integer.parseInt(input));
-                            if (user != null) {
-                                System.out.println(user);
-                            } else System.out.println("Пользователь не найден!");
-                        } else {
-                            System.out.println("Некорректный id пользователя");
-                            logger.info("Введен некорректный id");
-                        }
-                        break;
-                    case 3:
-                        System.out.println("Введите id Пользователя, которого хотите обновить");
-                        input = scanner.nextLine();
-                        if (checkNumber(input)) {
-                            user = userService.findUser(Integer.parseInt(input));
-                            if (user != null) {
-                                System.out.println("Введите последовательно новые - Имя, email и возраст через запятую c пробелом");
-                                input = scanner.nextLine();
-                                try {
-                                    String[] newUserValues = input.split(", ");
-                                    if (checkNumber(newUserValues[2])) {
-                                        user.setName(newUserValues[0]);
-                                        user.setEmail(newUserValues[1]);
-                                        user.setAge(Integer.parseInt(newUserValues[2]));
-                                        userService.updateUser(user);
-                                    } else {
-                                        System.out.println("Возраст должен быть числом!");
-                                        logger.info("Введен некорректный возраст");
-                                    }
-                                } catch (IndexOutOfBoundsException e) {
-                                    logger.error(e);
-                                }
-                            } else System.out.println("Пользователь не найден!");
-                        } else {
-                            System.out.println("Некорректный id пользователя");
-                            logger.info("Введен некорректный id");
-                        }
-                        break;
-                    case 4:
-                        System.out.println("Введите id Пользователя, которого хотите удалить");
-                        input = scanner.nextLine();
-                        if (checkNumber(input)) {
-                            user = userService.findUser(Integer.parseInt(input));
-                            if (user != null) {
-                                userService.deleteUser(user);
-                            } else System.out.println("Пользователь не найден!");
-                        } else {
-                            System.out.println("Некорректный id пользователя");
-                            logger.info("Введен некорректный id");
-                        }
-                        break;
-                    case 0:
-                        runFlag = false;
+                    case 1 -> createUserFomInputData();
+                    case 2 -> searchUserById();
+                    case 3 -> updateUserById();
+                    case 4 -> deleteUserById();
+                    case 0 -> runFlag = false;
                 }
             } else {
                 System.out.println("Введите корректный пункт меню");
-                scanner.next();
+                SCANNER.next();
             }
         }
 
@@ -124,6 +56,71 @@ public class Main {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    public static void createUserFomInputData() {
+        System.out.println("Введите последовательно Имя, email и возраст через запятую c пробелом");
+        String input = SCANNER.nextLine();
+        try {
+            String[] userValues = input.split(", ");
+            if (checkNumber(userValues[2])) {
+                userService.createUser(userValues[0], userValues[1], Integer.parseInt(userValues[2]));
+                System.out.println("Пользователь создан");
+            } else {
+                System.out.println("Возраст должен быть числом!");
+                logger.info("Введен некорректный возраст");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            logger.error(e);
+        }
+    }
+
+    public static User searchUserById() {
+        User user = null;
+        System.out.println("Введите id Пользователя");
+        String input = SCANNER.nextLine();
+        if (checkNumber(input)) {
+            user = userService.findUser(Integer.parseInt(input));
+            if (user != null) {
+                System.out.println(user);
+                return user;
+            } else System.out.println("Пользователь не найден!");
+        } else {
+            System.out.println("Некорректный id пользователя");
+            logger.info("Введен некорректный id");
+        }
+        return null;
+    }
+
+    public static void updateUserById() {
+        User user = searchUserById();
+        if (user != null) {
+            System.out.println("Введите последовательно новые - Имя, email и возраст через запятую c пробелом");
+            String input = SCANNER.nextLine();
+            try {
+                String[] newUserValues = input.split(", ");
+                if (checkNumber(newUserValues[2])) {
+                    user.setName(newUserValues[0]);
+                    user.setEmail(newUserValues[1]);
+                    user.setAge(Integer.parseInt(newUserValues[2]));
+                    userService.updateUser(user);
+                    System.out.println("Пользователь обновлен!");
+                } else {
+                    System.out.println("Возраст должен быть числом!");
+                    logger.info("Введен некорректный возраст");
+                }
+            } catch (IndexOutOfBoundsException e) {
+                logger.error(e);
+            }
+        }
+    }
+
+    public static void deleteUserById() {
+        User user = searchUserById();
+        if (user != null) {
+            userService.deleteUser(user);
+            System.out.println("Пользователь удален");
         }
     }
 }
