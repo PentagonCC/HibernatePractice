@@ -16,19 +16,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(int userId) {
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            User user = session.find(User.class, userId);
-            session.close();
-            return user;
-        } catch (NullPointerException e) {
-            logger.error(e);
-            throw new NullPointerException(e.getMessage());
+        try (Session session = sessionFactory.openSession()) {
+            return session.find(User.class, userId);
         } catch (HibernateException e) {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
             logger.error(e);
             throw new HibernateException("Ошибка операции с БД");
         }
@@ -36,25 +26,17 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User create(User user) {
-        Session session = null;
         Transaction createTransaction = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             createTransaction = session.beginTransaction();
             session.persist(user);
             createTransaction.commit();
-            session.close();
             return user;
         } catch (NullPointerException e) {
             logger.error(e);
             throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
-            if (createTransaction != null) {
-                createTransaction.rollback();
-            }
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+            if (createTransaction != null) createTransaction.rollback();
             logger.error(e);
             throw new HibernateException("Ошибка операции с БД");
         }
@@ -63,25 +45,17 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User update(User user) {
-        Session session = null;
         Transaction updateTransaction = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             updateTransaction = session.beginTransaction();
             session.merge(user);
             updateTransaction.commit();
-            session.close();
             return user;
         } catch (NullPointerException e) {
             logger.error(e);
             throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
-            if (updateTransaction != null) {
-                updateTransaction.rollback();
-            }
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+            if (updateTransaction != null) updateTransaction.rollback();
             logger.error(e);
             throw new HibernateException("Ошибка операции с БД");
         }
@@ -89,24 +63,16 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void delete(User user) {
-        Session session = null;
         Transaction deleteTransaction = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             deleteTransaction = session.beginTransaction();
             session.remove(user);
             deleteTransaction.commit();
-            session.close();
         } catch (NullPointerException e) {
             logger.error(e);
             throw new NullPointerException(e.getMessage());
         } catch (HibernateException e) {
-            if (deleteTransaction != null) {
-                deleteTransaction.rollback();
-            }
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+            if (deleteTransaction != null) deleteTransaction.rollback();
             logger.error(e);
             throw new HibernateException("Ошибка операции с БД");
         }
