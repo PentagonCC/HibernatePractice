@@ -6,6 +6,7 @@ import org.example.dao.UserDaoImpl;
 import org.example.models.User;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class UserService {
 
@@ -13,7 +14,7 @@ public class UserService {
     private UserDaoImpl userDao;
 
     public UserService(UserDaoImpl userDao) {
-       this.userDao = new UserDaoImpl();
+       this.userDao = userDao;
     }
 
     public User findUser(int id) {
@@ -25,7 +26,7 @@ public class UserService {
         if (!name.isBlank() && !email.isBlank() && age > 0) {
             logger.info("Создание пользователя");
             LocalDateTime createdAt = LocalDateTime.now();
-            User newUser = new User(name, email, age, createdAt);
+            User newUser = new User(name, email, age, createdAt.truncatedTo(ChronoUnit.MINUTES));
             userDao.create(newUser);
         }
         else {
