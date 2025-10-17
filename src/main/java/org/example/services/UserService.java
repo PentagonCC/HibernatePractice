@@ -14,7 +14,7 @@ public class UserService {
     private UserDaoImpl userDao;
 
     public UserService(UserDaoImpl userDao) {
-       this.userDao = userDao;
+        this.userDao = userDao;
     }
 
     public User findUser(int id) {
@@ -28,13 +28,12 @@ public class UserService {
             LocalDateTime createdAt = LocalDateTime.now();
             User newUser = new User(name, email, age, createdAt.truncatedTo(ChronoUnit.MINUTES));
             userDao.create(newUser);
-        }
-        else {
+        } else {
             System.out.println("Неверно введены данные");
         }
     }
 
-    public void updateUser(User user){
+    public void updateUser(User user) {
         logger.info("Обновление пользователя");
         userDao.update(user);
     }

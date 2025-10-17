@@ -12,8 +12,13 @@ import java.util.Scanner;
 public class Main {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final Scanner SCANNER = new Scanner(System.in);
+    private static Scanner SCANNER = new Scanner(System.in);
     private static UserService userService = new UserService(new UserDaoImpl());
+
+    //Для тестов
+    static void setScanner(Scanner customScanner) {
+        SCANNER = customScanner;
+    }
 
     static void menu() {
         System.out.println("""

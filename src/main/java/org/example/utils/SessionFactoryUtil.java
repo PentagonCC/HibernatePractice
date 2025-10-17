@@ -11,7 +11,8 @@ public class SessionFactoryUtil {
     private static final Logger logger = LogManager.getLogger();
     private static SessionFactory sessionFactory;
 
-    private SessionFactoryUtil(){}
+    private SessionFactoryUtil() {
+    }
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
@@ -21,8 +22,7 @@ public class SessionFactoryUtil {
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 logger.error(e);
             }
         }

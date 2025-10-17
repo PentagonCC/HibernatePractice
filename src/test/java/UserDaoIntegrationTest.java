@@ -2,6 +2,7 @@ import org.example.dao.UserDao;
 import org.example.dao.UserDaoImpl;
 import org.example.models.User;
 import org.example.utils.SessionFactoryUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.*;
@@ -17,6 +18,7 @@ public class UserDaoIntegrationTest {
 
     private UserDao userDao;
     private static SessionFactory defaultSessionFactory;
+    private static SessionFactory testSessionFactory;
 
     private static void setSessionFactory(SessionFactory sessionFactory) {
         try {
@@ -50,7 +52,7 @@ public class UserDaoIntegrationTest {
 
         configuration.addAnnotatedClass(User.class);
 
-        SessionFactory testSessionFactory = configuration.buildSessionFactory();
+        testSessionFactory = configuration.buildSessionFactory();
 
         setSessionFactory(testSessionFactory);
     }
@@ -169,5 +171,4 @@ public class UserDaoIntegrationTest {
         assertThrows(RuntimeException.class, () -> userDao.findById(user.getId()));
         beforeAll();
     }
-
 }
