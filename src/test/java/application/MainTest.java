@@ -4,7 +4,6 @@ import org.example.application.Main;
 import org.example.dao.UserDao;
 import org.example.dao.UserDaoImpl;
 import org.example.models.User;
-import org.example.utils.SessionFactoryUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +21,6 @@ public class MainTest {
 
     @BeforeEach
     void setUp() {
-
         System.setOut(new PrintStream(outContent));
     }
 
