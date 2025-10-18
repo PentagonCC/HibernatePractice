@@ -1,4 +1,4 @@
-package org.example;
+package org.example.application;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,11 +16,11 @@ public class Main {
     private static UserService userService = new UserService(new UserDaoImpl());
 
     //Для тестов
-    static void setScanner(Scanner customScanner) {
+    public static void setScanner(Scanner customScanner) {
         SCANNER = customScanner;
     }
 
-    static void menu() {
+    public static void menu() {
         System.out.println("""
                 1.Добавить пользователя
                 2.Найти пользователя

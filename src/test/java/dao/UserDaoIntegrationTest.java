@@ -1,8 +1,9 @@
+package dao;
+
 import org.example.dao.UserDao;
 import org.example.dao.UserDaoImpl;
 import org.example.models.User;
 import org.example.utils.SessionFactoryUtil;
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.*;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserDaoIntegrationTest {
 
     private UserDao userDao;
-    private static SessionFactory defaultSessionFactory;
+    private static SessionFactory defaultSessionFactory = SessionFactoryUtil.getSessionFactory();
     private static SessionFactory testSessionFactory;
 
     private static void setSessionFactory(SessionFactory sessionFactory) {
@@ -38,9 +39,6 @@ public class UserDaoIntegrationTest {
     @BeforeAll
     static void beforeAll() {
         postgres.start();
-
-        defaultSessionFactory = SessionFactoryUtil.getSessionFactory();
-
         Configuration configuration = new Configuration()
                 .setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
                 .setProperty("hibernate.connection.url", postgres.getJdbcUrl())

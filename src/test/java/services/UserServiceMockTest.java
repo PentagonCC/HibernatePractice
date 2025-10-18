@@ -1,3 +1,5 @@
+package services;
+
 import org.example.dao.UserDaoImpl;
 import org.example.models.User;
 import org.example.services.UserService;

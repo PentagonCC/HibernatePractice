@@ -1,3 +1,5 @@
+package models;
+
 import org.example.models.User;
 import org.junit.jupiter.api.Test;
 
