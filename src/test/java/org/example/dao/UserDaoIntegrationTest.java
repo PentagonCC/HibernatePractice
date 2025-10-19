@@ -1,4 +1,4 @@
-package dao;
+package org.example.dao;
 
 import org.example.dao.UserDao;
 import org.example.dao.UserDaoImpl;

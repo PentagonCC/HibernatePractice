@@ -1,4 +1,4 @@
-package application;
+package org.example.application;
 
 import org.example.application.Main;
 import org.example.dao.UserDao;

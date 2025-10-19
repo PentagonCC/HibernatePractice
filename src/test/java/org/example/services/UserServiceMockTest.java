@@ -1,8 +1,7 @@
-package services;
+package org.example.services;
 
 import org.example.dao.UserDaoImpl;
 import org.example.models.User;
-import org.example.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
